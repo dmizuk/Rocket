@@ -172,6 +172,20 @@ impl<'s> Uncased<'s> {
         self.string.into_owned()
     }
 
+    /// Converts `self` into a `Box<UncasedStr>`.
+    ///
+    /// ```
+    /// use rocket::http::uncased::Uncased;
+    ///
+    /// let boxed = Uncased::new("Content-Type").into_boxed_uncased_str();
+    /// assert_eq!(&*boxed, "content-type");
+    /// ```
+    pub fn into_boxed_uncased_str(self) -> Box<UncasedStr> {
+        unsafe {
+            ::std::mem::transmute(self.string.into_owned().into_boxed_str())
+        }
+    }
+
     /// Returns the inner `Cow`.
     #[doc(hidden)]
     #[inline(always)]
